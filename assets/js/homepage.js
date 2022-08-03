@@ -2,6 +2,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl=document.querySelector("#language-buttons")
 
 var formSubmitHandler = function (event) {
     //prevent page from refreshing
@@ -45,12 +46,7 @@ var displayRepos = function (repos, searchTerm) {
         repoContainerEl.textContent = "No repositories found.";
         return;
     }
-    // console.log(repos);
-    // console.log(searchTerm);
-    // //clear old content
-    // repoContainerEl.textContent = "";
-    // repoSearchTerm.textContent = searchTerm;
-
+   
     repoSearchTerm.textContent = searchTerm;
 
     //loop over repos
@@ -77,7 +73,7 @@ var displayRepos = function (repos, searchTerm) {
         //check if current repo has issues or not
         if (repos[i].open_issues_count > 0) {
             statusEl.innerHTML =
-                "<i class='fas fa-times status-icon icon-danger'></i>" + repos[i].open_issues_count + "issues(s)";
+                "<i class='fas fa-times status-icon icon-danger'></i> " + repos[i].open_issues_count + " issue(s)";
         } else {
             statusEl.innerHTML="<i class='fas fa-check-square status-icon icon-success'></i>"
         }
@@ -89,4 +85,30 @@ var displayRepos = function (repos, searchTerm) {
     }
 };
 
+var buttonClickHandler = function (event) {
+    var language = event.target.getAttribute("data-language");
+    if (language) {
+        getFeaturedRepos(language);
+
+        //clear old content
+        repoContainerEl.textContent = "";
+    }
+};
+
+var getFeaturedRepos = function (language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "is:featured&sort=help-wanted-issues";
+    fetch(apiUrl).then(function (response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.item, language);
+            });
+        } else {
+            alert('Error: Github User Not Found');
+        }
+    });
+};
+
+
+
 userFormEl.addEventListener("submit", formSubmitHandler);
+languageButtonsEl.addEventListener("click", buttonClickHandler);

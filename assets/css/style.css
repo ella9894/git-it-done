@@ -137,7 +137,8 @@ p{
 }
 /*FORM*/
 .form-label,.form-input,.form-textarea { 
-    display: block;}
+    display: block;
+}
 .form-label{
     font-size: 1.1rem;
     margin: 0 0 0 5px;
@@ -158,7 +159,7 @@ p{
     min-width: 100vw;
 }
 /*FONT UTILS*/
-.text-upper{
+.text-uppercase {
     text-transform: uppercase;
 }
 /*FLEX CONTENT*/
